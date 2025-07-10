@@ -1,0 +1,4 @@
+package: main
+output: oneof.gen.go
+generate:
+  models: true

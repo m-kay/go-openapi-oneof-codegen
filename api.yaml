@@ -1,0 +1,66 @@
+openapi: 3.0.1
+info:
+  title: openapi test
+  version: v0.0.1
+
+paths:
+  /change:
+    post:
+      operationId: change
+      requestBody:
+        description: the request
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/NameChange'
+                - $ref: '#/components/schemas/AddressChange'
+              discriminator:
+                propertyName: changeType
+                mapping:
+                  name: '#/components/schemas/NameChange'
+                  address: '#/components/schemas/AddressChange'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: object
+                    description: Object containing the response.
+                    properties:
+                      changeType:
+                        type: string
+                        description: the type of change made
+
+components:
+  schemas:
+    Change:
+      type: object
+      required:
+        - changeType
+      properties:
+        changeType:
+          type: string
+    NameChange:
+      allOf:
+        - $ref: '#/components/schemas/Change'
+        - type: object
+          required:
+            - newName
+          properties:
+            newName:
+              type: string
+    AddressChange:
+      allOf:
+        - $ref: '#/components/schemas/Change'
+        - type: object
+          required:
+            - newAddress
+          properties:
+            newAddress:
+              type: string
